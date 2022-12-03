@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="connect">Connect Wallet</button>
+    <button id="sign">Sign Message</button>
+
+    <script type="module">
+        import { providers } from "https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.esm.min.js";
+
+        const connect_btn = document.querySelector("#connect");
+        const sign_btn = document.querySelector("#sign");
+
+        let provider;
+        let signer;
+
+        const connect = async () => {
+            if(window.ethereum) {
+                provider = new providers.Web3Provider(window.ethereum);
+                await provider.send("eth_requestAccounts", []);
+                signer = provider.getSigner();
+            }
+        }
+
+        const sign = async () => {
+            const msg = "\nunknown wants you to sign in with your Ethereum account:\n0xE6f3a0fF3b2Ef23ca6Bc8167F94efCe2e4E62aa2\n\nSign in with ethereum to lens\n\nURI: unknown\nVersion: 1\nChain ID: 80001\nNonce: d8da5d26bbda2a4a\nIssued At: 2022-11-28T18:57:15.006Z\n ";
+            console.log(msg);
+
+            const signature =  await signer.signMessage(msg);
+            console.log(signature);
+        }
+
+        connect_btn.addEventListener("click", connect);
+        sign_btn.addEventListener("click", sign);
+    </script>
+</body>
+</html>
